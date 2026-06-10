@@ -1,0 +1,1 @@
+CTF{local_file_read_finishes_the_board}
