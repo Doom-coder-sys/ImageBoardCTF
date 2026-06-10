@@ -1,0 +1,41 @@
+@using ImageBoardCTF.Models
+@{
+    ViewData["Title"] = "создать пост";
+    var posts = ViewBag.MyPosts as List<Post> ?? new List<Post>();
+}
+<h1>создать пост</h1>
+@if (ViewBag.Error is not null)
+{
+    <div class="alert error">Нужны заголовок и текст.</div>
+}
+<form method="post" action="/user/create-post" class="panel form">
+    <label>заголовок <input name="title" /></label>
+    <label>image url <input name="imageUrl" placeholder="https://..." /></label>
+    <label>текст <textarea id="bodyInput" name="body" rows="8" placeholder="текст поста"></textarea></label>
+    <div class="preview-panel">
+        <div class="preview-title">live preview</div>
+        <div id="livePreview" class="raw-preview"></div>
+    </div>
+    <button type="submit">опубликовать</button>
+</form>
+
+<section>
+    <h2>мои посты</h2>
+    @foreach (var post in posts)
+    {
+        <article class="post-card">
+            <div class="post-head">
+                <img class="avatar" src="@post.AvatarUrl" alt="avatar" onerror="this.onerror=null;this.src='/avatars/default.svg';" />
+                <div>
+                    <h3>@post.Title</h3>
+                    <div class="meta">#@post.Id · опубликовано</div>
+                </div>
+            </div>
+            <div class="raw-preview">@Html.Raw(post.Body)</div>
+        </article>
+    }
+</section>
+
+@section Scripts {
+    <script src="~/js/post-preview.js"></script>
+}

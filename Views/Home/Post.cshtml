@@ -1,0 +1,19 @@
+@model Post
+@{
+    ViewData["Title"] = Model.Title;
+}
+<article class="post-card single">
+    <div class="post-head">
+        <img class="avatar big" src="@Model.AvatarUrl" alt="avatar" onerror="this.onerror=null;this.src='/avatars/default.svg';" />
+        <div>
+            <h1>@Model.Title</h1>
+            <div class="meta">#@Model.Id · @Model.DisplayName (@Model.Username) · @Model.CreatedAt</div>
+        </div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+    {
+        <img class="post-image" src="@Model.ImageUrl" alt="post image" />
+    }
+    <p>@Model.Body</p>
+</article>
+<a href="/">назад</a>

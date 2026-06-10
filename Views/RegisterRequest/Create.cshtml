@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "заявка";
+}
+<h1>заявка на регистрацию</h1>
+@if (ViewBag.Error is not null)
+{
+    <div class="alert error">@ViewBag.Error</div>
+}
+@if (ViewBag.Message is not null || TempData["Message"] is not null)
+{
+    <div class="alert ok">Заявка сохранена. Модератор посмотрит её позже.</div>
+}
+<form method="post" action="/register-request" class="panel form">
+    <input type="hidden" name="requestedRole" value="user" />
+    <label>username <input name="username" /></label>
+    <label>password <input name="password" type="password" /></label>
+    <label>display name <input name="displayName" /></label>
+    <label>заметка <textarea name="note" rows="5" placeholder="зачем нужен доступ?"></textarea></label>
+    <button type="submit">отправить заявку</button>
+</form>

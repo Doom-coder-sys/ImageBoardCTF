@@ -1,0 +1,64 @@
+@model List<RegistrationRequest>
+@{
+    ViewData["Title"] = "модерация";
+}
+<h1>очередь заявок</h1>
+@if (ViewBag.Error is not null)
+{
+    <div class="alert error">@ViewBag.Error</div>
+}
+@if (ViewBag.Message is not null)
+{
+    <div class="alert ok">@ViewBag.Message</div>
+}
+
+<section class="panel">
+    <h2>ручное создание аккаунта</h2>
+    <form method="post" action="/moderator/create-user" class="grid-form">
+        <input name="username" placeholder="username" />
+        <input name="password" placeholder="password" />
+        <input name="displayName" placeholder="display name" />
+        <select name="role">
+            <option value="user">user</option>
+            <option value="moderator">moderator</option>
+        </select>
+        <button type="submit">создать</button>
+    </form>
+</section>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>username</th>
+        <th>display</th>
+        <th>requested</th>
+        <th>note</th>
+        <th>status</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var req in Model)
+    {
+        <tr>
+            <td>@req.Id</td>
+            <td>@req.Username</td>
+            <td>@req.DisplayName</td>
+            <td><code>@req.RequestedRole</code></td>
+            <td>@req.Note</td>
+            <td>@req.Status</td>
+            <td>
+                @if (req.Status == "pending")
+                {
+                    <form method="post" action="/moderator/approve">
+                        <input type="hidden" name="id" value="@req.Id" />
+                        <input type="hidden" name="requestedRole" value="@req.RequestedRole" />
+                        <button type="submit">approve</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,66 @@
+@inject ImageBoardCTF.Services.AuthService Auth
+@{
+    var showEntryRain = Auth.IsAuthenticated && Context.Request.Query["rain"].ToString() == "1";
+}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Кодовый Дождь</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+@if (showEntryRain)
+{
+    <div id="matrix-entry-overlay" class="matrix-entry-overlay" data-duration="3200" aria-hidden="true">
+        <canvas id="matrix-rain" class="matrix-rain" data-speed="0.34"></canvas>
+        <div class="matrix-entry-message">ACCESS GRANTED // @Auth.Username</div>
+    </div>
+}
+<div class="scanlines" aria-hidden="true"></div>
+<header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">█</span> Кодовый Дождь</a>
+    <nav>
+        <a href="/">посты</a>
+        <a href="/register-request">заявка</a>
+        @if (Auth.HasRole("user", "moderator", "admin"))
+        {
+            <a href="/user/create-post">создать пост</a>
+        }
+        @if (Auth.HasRole("moderator", "admin"))
+        {
+            <a href="/moderator/requests">модерация</a>
+        }
+        @if (Auth.HasRole("admin"))
+        {
+            <a href="/admin/logs">логи</a>
+            <a href="/admin/create-admin">создать admin</a>
+        }
+    </nav>
+    <div class="session">
+        @if (Auth.IsAuthenticated)
+        {
+            <img class="avatar tiny" src="@Auth.AvatarUrl" alt="avatar" onerror="this.onerror=null;this.src='/avatars/default.svg';" />
+            <span>@Auth.Username (@Auth.Role)</span>
+            <form method="post" action="/logout">
+                <button type="submit">выйти</button>
+            </form>
+        }
+        else
+        {
+            <a href="/login">войти</a>
+        }
+    </div>
+</header>
+<main class="container">
+    @RenderBody()
+</main>
+<script src="~/js/dev-panel.js"></script>
+@if (showEntryRain)
+{
+    <script src="~/js/matrix-rain.js"></script>
+}
+@RenderSection("Scripts", required: false)
+</body>
+</html>

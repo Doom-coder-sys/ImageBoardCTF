@@ -1,0 +1,47 @@
+@model LogViewModel
+@{
+    ViewData["Title"] = "логи";
+}
+<h1>логи</h1>
+<p class="hint">Быстрый просмотр локальных заметок по инцидентам. Ссылки открывают файл, если сообщение в таблице слишком короткое.</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>time</th>
+        <th>level</th>
+        <th>area</th>
+        <th>message</th>
+        <th>file</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var log in Model.Records)
+    {
+        <tr>
+            <td>@log.CreatedAt</td>
+            <td>@log.Level</td>
+            <td>@log.Area</td>
+            <td>@log.Message</td>
+            <td><a href="/admin/logs?file=@Uri.EscapeDataString(log.FileName)">@log.FileName</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<form method="get" action="/admin/logs" class="panel form compact">
+    <label>открыть файл <input name="file" value="@Model.SelectedFile" placeholder="app.log" /></label>
+    <button type="submit">открыть</button>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert error">@Model.Error</div>
+}
+@if (Model.FileContent is not null)
+{
+    <section class="panel">
+        <h2>@Model.SelectedFile</h2>
+        <pre>@Model.FileContent</pre>
+    </section>
+}

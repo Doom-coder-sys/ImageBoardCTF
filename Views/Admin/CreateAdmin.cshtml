@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "создать admin";
+}
+<h1>создать admin</h1>
+@if (ViewBag.Message is not null)
+{
+    <div class="alert ok">@ViewBag.Message</div>
+}
+<form method="post" action="/admin/create-admin" class="panel form">
+    <label>username <input name="username" /></label>
+    <label>password <input name="password" type="password" /></label>
+    <label>display name <input name="displayName" /></label>
+    <button type="submit">создать admin</button>
+</form>

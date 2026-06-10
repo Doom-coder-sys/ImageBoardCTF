@@ -1,0 +1,28 @@
+@model List<Post>
+@{
+    ViewData["Title"] = "лента";
+}
+<section class="hero">
+    <h1>Кодовый Дождь</h1>
+    <p>Русская имиджборда о Матрице, старых тредах, теориях и случайном системном шуме. Регистрация только через заявку.</p>
+</section>
+
+<section class="posts">
+@foreach (var post in Model)
+{
+    <article class="post-card">
+        <div class="post-head">
+            <img class="avatar" src="@post.AvatarUrl" alt="avatar" onerror="this.onerror=null;this.src='/avatars/default.svg';" />
+            <div>
+                <h2><a href="/post/@post.Id">@post.Title</a></h2>
+                <div class="meta">#@post.Id · @post.DisplayName (@post.Username) · @post.CreatedAt</div>
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(post.ImageUrl))
+        {
+            <img class="post-image" src="@post.ImageUrl" alt="post image" />
+        }
+        <p>@post.Body</p>
+    </article>
+}
+</section>

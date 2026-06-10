@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "вход";
+}
+<section class="login-shell">
+    <div class="login-card">
+        <h1>вход в Кодовый Дождь</h1>
+        @if (ViewBag.Error is not null)
+        {
+            <div class="alert error">Неверный логин или пароль</div>
+        }
+        <form method="post" action="/login" class="panel form login-form">
+            <label>username <input name="username" autocomplete="username" /></label>
+            <label>password <input name="password" type="password" autocomplete="current-password" /></label>
+            <button type="submit">войти</button>
+        </form>
+        <p class="hint">Открытой регистрации нет. Сначала заявка, потом очередь.</p>
+    </div>
+</section>
