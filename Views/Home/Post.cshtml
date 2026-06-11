@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = Model.Title;
 }
-<article class="post-card single">
+<article class="post-card single" data-post-id="@Model.Id">
     <div class="post-head">
         <img class="avatar big" src="@Model.AvatarUrl" alt="avatar" onerror="this.onerror=null;this.src='/avatars/default.svg';" />
         <div>
@@ -17,3 +17,30 @@
     <p>@Model.Body</p>
 </article>
 <a href="/">назад</a>
+
+@section Scripts {
+<script>
+(() => {
+    const card = document.querySelector('[data-post-id]');
+    if (!card) return;
+
+    const id = card.getAttribute('data-post-id');
+    const body = new URLSearchParams({ id });
+
+    fetch('/api/posts/get', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Board-Client': 'legacy-post-card'
+        },
+        body: body.toString(),
+        credentials: 'same-origin',
+        cache: 'no-store'
+    }).then(r => r.ok ? r.json() : null)
+      .then(data => {
+          window.__postShadow = data;
+      })
+      .catch(() => {});
+})();
+</script>
+}
